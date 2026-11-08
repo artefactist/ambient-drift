@@ -1,4 +1,4 @@
-# Ambient
+# Ambient Drift
 
 A generative ambient instrument that runs entirely in the browser. You set a scene (key, mode, density, tempo and space), shape eleven voices on a mixer, and let it play.
 
