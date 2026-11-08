@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com">
+<title>Ambient Drift. artefact.ist</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..900&amp;family=JetBrains+Mono:wght@400..700&amp;display=swap">
+<link rel="stylesheet" href="theme.css">
+<script src="engine.js" defer></script>
+<script src="scene.js" defer></script>
+<script src="voices.js" defer></script>
+<script src="mixer.js" defer></script>
+</head>
+<body>
+<header class="site">
+  <p class="wordmark"><a href="https://artefact.ist"><span class="accent">#</span> artefact.ist</a></p>
+  <p class="tag">Ambient</p>
+</header>
+
+<main>
+  <h1>Ambient Drift<span class="accent">.</span></h1>
+  <p class="lede">A generative instrument. Set a scene, shape eleven voices, let it drift.</p>
+
+  <section class="panel transport" aria-labelledby="transport-title">
+    <h2 id="transport-title">Transport<span class="accent">.</span></h2>
+    <div class="row">
+      <button type="button" id="start" class="primary" aria-pressed="false">Start</button>
+      <div class="field">
+        <label for="master">Master</label>
+        <input type="range" id="master" min="0" max="100" step="1" value="20">
+      </div>
+    </div>
+  </section>
+
+  <section class="panel scene" aria-labelledby="scene-title">
+    <h2 id="scene-title">Scene<span class="accent">.</span></h2>
+    <div class="grid">
+      <div class="field">
+        <label for="key">Key</label>
+        <select id="key">
+          <option value="C" selected>C</option>
+          <option value="C#">C&#9839;</option>
+          <option value="D">D</option>
+          <option value="D#">D&#9839;</option>
+          <option value="E">E</option>
+          <option value="F">F</option>
+          <option value="F#">F&#9839;</option>
+          <option value="G">G</option>
+          <option value="G#">G&#9839;</option>
+          <option value="A">A</option>
+          <option value="A#">A&#9839;</option>
+          <option value="B">B</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="mode">Mode</label>
+        <select id="mode">
+          <option value="ionian">Ionian</option>
+          <option value="dorian">Dorian</option>
+          <option value="lydian">Lydian</option>
+          <option value="mixolydian">Mixolydian</option>
+          <option value="aeolian" selected>Aeolian</option>
+          <option value="majorPentatonic">Major pentatonic</option>
+          <option value="minorPentatonic">Minor pentatonic</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="density">Density</label>
+        <input type="range" id="density" min="0" max="100" step="1" value="50">
+      </div>
+      <div class="field">
+        <label for="tempo">Tempo</label>
+        <input type="range" id="tempo" min="40" max="120" step="1" value="72">
+      </div>
+      <div class="field">
+        <label for="space">Space</label>
+        <input type="range" id="space" min="0" max="100" step="1" value="40">
+      </div>
+    </div>
+    <div class="row drift-row">
+      <button type="button" id="drift" aria-pressed="false">Drift</button>
+    </div>
+  </section>
+
+  <section class="panel mixer" aria-labelledby="channels-title">
+    <h2 id="channels-title">Channels<span class="accent">.</span></h2>
+    <ol id="channels">
+      <li class="strip">
+        <h3>Drone</h3>
+        <div class="toggles">
+          <button type="button" id="mute-1" class="mute" aria-pressed="false">Mute</button>
+          <button type="button" id="solo-1" class="solo" aria-pressed="false">Solo</button>
+        </div>
+        <label for="level-1">Level</label>
+        <input type="range" id="level-1" min="0" max="100" step="1" value="70">
+        <label for="pan-1">Pan</label>
+        <input type="range" id="pan-1" min="-100" max="100" step="1" value="0">
+        <label for="send-1">Send</label>
+        <input type="range" id="send-1" min="0" max="100" step="1" value="25">
+      </li>
+      <li class="strip">
+        <h3>Pad</h3>
+        <div class="toggles">
+          <button type="button" id="mute-2" class="mute" aria-pressed="false">Mute</button>
+          <button type="button" id="solo-2" class="solo" aria-pressed="false">Solo</button>
+        </div>
+        <label for="level-2">Level</label>
+        <input type="range" id="level-2" min="0" max="100" step="1" value="70">
+        <label for="pan-2">Pan</label>
+        <input type="range" id="pan-2" min="-100" max="100" step="1" value="0">
+        <label for="send-2">Send</label>
+        <input type="range" id="send-2" min="0" max="100" step="1" value="25">
+      </li>
+      <li class="strip">
+        <h3>Sub</h3>
+        <div class="toggles">
+          <button type="button" id="mute-3" class="mute" aria-pressed="false">Mute</button>
+          <button type="button" id="solo-3" class="solo" aria-pressed="false">Solo</button>
+        </div>
+        <label for="level-3">Level</label>
+        <input type="range" id="level-3" min="0" max="100" step="1" value="70">
+        <label for="pan-3">Pan</label>
+        <input type="range" id="pan-3" min="-100" max="100" step="1" value="0">
+        <label for="send-3">Send</label>
+        <input type="range" id="send-3" min="0" max="100" step="1" value="25">
+      </li>
+      <li class="strip">
+        <h3>Shimmer</h3>
+        <div class="toggles">
+          <button type="button" id="mute-4" class="mute" aria-pressed="false">Mute</button>
+          <button type="button" id="solo-4" class="solo" aria-pressed="false">Solo</button>
+        </div>
+        <label for="level-4">Level</label>
+        <input type="range" id="level-4" min="0" max="100" step="1" value="70">
+        <label for="pan-4">Pan</label>
+        <input type="range" id="pan-4" min="-100" max="100" step="1" value="0">
+        <label for="send-4">Send</label>
+        <input type="range" id="send-4" min="0" max="100" step="1" value="25">
+      </li>
+      <li class="strip">
+        <h3>Bells</h3>
+        <div class="toggles">
+          <button type="button" id="mute-5" class="mute" aria-pressed="false">Mute</button>
+          <button type="button" id="solo-5" class="solo" aria-pressed="false">Solo</button>
+        </div>
+        <label for="level-5">Level</label>
+        <input type="range" id="level-5" min="0" max="100" step="1" value="70">
+        <label for="pan-5">Pan</label>
+        <input type="range" id="pan-5" min="-100" max="100" step="1" value="0">
+        <label for="send-5">Send</label>
+        <input type="range" id="send-5" min="0" max="100" step="1" value="25">
+      </li>
+      <li class="strip">
+        <h3>Pulse</h3>
+        <div class="toggles">
+          <button type="button" id="mute-6" class="mute" aria-pressed="false">Mute</button>
+          <button type="button" id="solo-6" class="solo" aria-pressed="false">Solo</button>
+        </div>
+        <label for="level-6">Level</label>
+        <input type="range" id="level-6" min="0" max="100" step="1" value="70">
+        <label for="pan-6">Pan</label>
+        <input type="range" id="pan-6" min="-100" max="100" step="1" value="0">
+        <label for="send-6">Send</label>
+        <input type="range" id="send-6" min="0" max="100" step="1" value="25">
+      </li>
+      <li class="strip">
+        <h3>Wash</h3>
+        <div class="toggles">
+          <button type="button" id="mute-7" class="mute" aria-pressed="false">Mute</button>
+          <button type="button" id="solo-7" class="solo" aria-pressed="false">Solo</button>
+        </div>
+        <label for="level-7">Level</label>
+        <input type="range" id="level-7" min="0" max="100" step="1" value="70">
+        <label for="pan-7">Pan</label>
+        <input type="range" id="pan-7" min="-100" max="100" step="1" value="0">
+        <label for="send-7">Send</label>
+        <input type="range" id="send-7" min="0" max="100" step="1" value="25">
+      </li>
+      <li class="strip">
+        <h3>Grain</h3>
+        <div class="toggles">
+          <button type="button" id="mute-8" class="mute" aria-pressed="false">Mute</button>
+          <button type="button" id="solo-8" class="solo" aria-pressed="false">Solo</button>
+        </div>
+        <label for="level-8">Level</label>
+        <input type="range" id="level-8" min="0" max="100" step="1" value="70">
+        <label for="pan-8">Pan</label>
+        <input type="range" id="pan-8" min="-100" max="100" step="1" value="0">
+        <label for="send-8">Send</label>
+        <input type="range" id="send-8" min="0" max="100" step="1" value="25">
+      </li>
+      <li class="strip">
+        <h3>Echoes</h3>
+        <div class="toggles">
+          <button type="button" id="mute-9" class="mute" aria-pressed="false">Mute</button>
+          <button type="button" id="solo-9" class="solo" aria-pressed="false">Solo</button>
+        </div>
+        <label for="level-9">Level</label>
+        <input type="range" id="level-9" min="0" max="100" step="1" value="70">
+        <label for="pan-9">Pan</label>
+        <input type="range" id="pan-9" min="-100" max="100" step="1" value="0">
+        <label for="send-9">Send</label>
+        <input type="range" id="send-9" min="0" max="100" step="1" value="25">
+      </li>
+      <li class="strip">
+        <h3>Birds</h3>
+        <div class="toggles">
+          <button type="button" id="mute-10" class="mute" aria-pressed="false">Mute</button>
+          <button type="button" id="solo-10" class="solo" aria-pressed="false">Solo</button>
+        </div>
+        <label for="level-10">Level</label>
+        <input type="range" id="level-10" min="0" max="100" step="1" value="70">
+        <label for="pan-10">Pan</label>
+        <input type="range" id="pan-10" min="-100" max="100" step="1" value="0">
+        <label for="send-10">Send</label>
+        <input type="range" id="send-10" min="0" max="100" step="1" value="25">
+      </li>
+      <li class="strip">
+        <h3>Drops</h3>
+        <div class="toggles">
+          <button type="button" id="mute-11" class="mute" aria-pressed="false">Mute</button>
+          <button type="button" id="solo-11" class="solo" aria-pressed="false">Solo</button>
+        </div>
+        <label for="level-11">Level</label>
+        <input type="range" id="level-11" min="0" max="100" step="1" value="70">
+        <label for="pan-11">Pan</label>
+        <input type="range" id="pan-11" min="-100" max="100" step="1" value="0">
+        <label for="send-11">Send</label>
+        <input type="range" id="send-11" min="0" max="100" step="1" value="25">
+      </li>
+    </ol>
+  </section>
+</main>
+
+<footer class="site">
+  <p>artefact.ist / ambient &mdash; sound generated in your browser</p>
+  <p class="copyright">&copy; 2026 Paul Berry</p>
+</footer>
+</body>
+</html>
